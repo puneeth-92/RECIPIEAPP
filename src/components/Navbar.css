@@ -1,0 +1,26 @@
+.navbar{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fdf2e9;
+}
+
+.home{
+    margin: 1rem;
+    padding: 0.5rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+.nav-items ul{
+    display: flex;
+    justify-content: space-between;  
+    align-items: center;
+}
+.nav-items ul a {
+    margin: 1rem 2rem 1rem 2rem;
+    padding: 0.25rem;
+    font-size: 1.1rem;
+}
+
