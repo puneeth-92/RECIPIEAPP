@@ -13,6 +13,6 @@ export default function Navbar(){
                 <a href="#"><li><Button info="Login/Signup" color="rgb(255, 115, 0)"/></li></a>
             </ul>
         </div>
-    </div>
+    </div> 
     )
 }
