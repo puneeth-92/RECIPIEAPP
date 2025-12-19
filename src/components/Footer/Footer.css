@@ -1,0 +1,34 @@
+.footer {
+    background-color: #f6dcc1;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.socials {
+    display: flex;
+    gap: 28px;
+}
+
+.socials i {
+    font-size: 26px;
+}
+
+.links {
+    margin-top: 20px;
+    font-size: 18px;
+}
+
+@media (max-width: 768px) {
+    .footer-container {
+        padding: 40px 20px;
+    } 
+}
