@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config();
 
+const recipeRoutes = require("./routes/recipe");
+
 const app = express();
 
 app.use(cors());
@@ -12,10 +14,13 @@ mongoose.connect(process.env.MONGO_URL)
   .then(() => console.log("MongoDB connected"))
   .catch(err => console.log(err));
 
+app.use("/recipes", recipeRoutes);
+
 app.get("/", (req, res) => {
-  res.send("Recipe API running");
+  res.send("Recipie backend running");
 });
 
-app.listen(5000, () => {
-  console.log("Backend running on port 5000");
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
