@@ -21,6 +21,11 @@
     color: #f97316;
 }
 
+.logo a {
+    text-decoration: none;
+    color: inherit;
+}
+
 .nav-links {
     display: flex;
     gap: 35px;
@@ -30,6 +35,12 @@
 
 .nav-links li {
     cursor: pointer;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
 }
 
 .auth-btn {
@@ -110,5 +121,5 @@
     to {
         opacity: 1;
         transform: translateY(0);
-    } 
+    }
 }
