@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import RecipeCard from "../components/RecipeCard/RecipeCard";
+import Loading from "../components/Loading/Loading";
 import "./AllRecipes.css";
 
 export default function AllRecipes() {
@@ -17,7 +18,7 @@ export default function AllRecipes() {
   }, []);
 
   if (loading) {
-    return <h2 className="loading ">Loading recipes...</h2>;
+    return <Loading />;
   }
 
   return (

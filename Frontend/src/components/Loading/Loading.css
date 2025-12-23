@@ -1,0 +1,35 @@
+.loading-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 80px;
+}
+
+.loading-bar {
+    width: 200px;
+    height: 4px;
+    background-color: #fde6cf;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+}
+
+.loading-bar::after {
+    content: "";
+    position: absolute;
+    left: -40%;
+    width: 40%;
+    height: 100%;
+    background-color: #f97316;
+    animation: loadingMove 1s infinite ease-in-out;
+}
+
+@keyframes loadingMove {
+    from {
+        left: -40%;
+    }
+
+    to {
+        left: 100%;
+    }
+}

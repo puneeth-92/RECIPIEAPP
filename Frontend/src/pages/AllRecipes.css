@@ -10,14 +10,23 @@
     text-align: center;
 }
 
+
 .recipes-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 24px;
 }
 
-.loading {
-    text-align: center;
-    margin-top: 80px;
-    font-size: 20px;
+@media (max-width: 1024px) {
+    .recipes-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
+
+
+@media (max-width: 640px) {
+    .recipes-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
