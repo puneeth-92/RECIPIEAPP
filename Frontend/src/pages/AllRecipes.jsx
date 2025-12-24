@@ -18,7 +18,7 @@ export default function AllRecipes() {
   }, []);
 
   if (loading) {
-    return <Loading />;
+    return <Loading />; 
   }
 
   return (
