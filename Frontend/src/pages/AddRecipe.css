@@ -1,46 +1,46 @@
-.edit-recipe {
+.add-recipe {
     width: 50vw;
     max-width: 900px;
     margin: 40px auto;
     padding: 0 20px;
 }
 @media (max-width: 640px) {
-    .edit-recipe {
+    .add-recipe {
         width: 90vw;
-        max-width:1000px;
+        max-width: 1000px;
     }
 }
-.edit-title {
+.add-title {
     text-align: center;
     font-size: 26px;
     margin-bottom: 24px;
 }
 
-.edit-form {
+.add-form {
     display: flex;
     flex-direction: column;
     gap: 16px;
 }
 
-.edit-input,
-.edit-textarea,
-.edit-select {
+.add-input,
+.add-textarea,
+.add-select {
     padding: 12px;
     border-radius: 10px;
     border: 1px solid #ccc;
     font-size: 14px;
 }
 
-.edit-textarea {
+.add-textarea {
     resize: vertical;
     min-height: 90px;
 }
 
-.edit-file {
+.add-file {
     font-size: 14px;
 }
 
-.edit-btn {
+.add-btn {
     background-color: #f97316;
     color: white;
     border: none;
@@ -51,6 +51,6 @@
     margin-top: 10px;
 }
 
-.edit-btn:hover {
+.add-btn:hover {
     opacity: 0.9;
 }

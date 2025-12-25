@@ -26,7 +26,9 @@ const recipeSchema = new Schema(
       enum: ["Breakfast", "Lunch", "Dinner", "Snack", "Dessert", "Other"],
       default: "Other",
     },
-
+    videoUrl: {
+      type: String
+    },
     image: {
       url: {
         type: String,

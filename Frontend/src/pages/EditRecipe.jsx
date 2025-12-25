@@ -7,34 +7,37 @@ export default function EditRecipe() {
   const { id } = useParams();
   const navigate = useNavigate();
 
+  const [image, setImage] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+
   const [formData, setFormData] = useState({
     title: "",
     description: "",
+    videoUrl: "",
     prepTime: "",
-    category: "",
+    servings: "",
+    category: "Other",
     ingredients: "",
-    instructions: "",
-    imageUrl: ""
+    instructions: ""
   });
-
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch(`http://localhost:5001/recipes/${id}`)
       .then(res => res.json())
       .then(data => {
         setFormData({
-            title: data.title || "",
-            description: data.description || "",
-            prepTime: data.prepTime || "",
-            category: data.category || "",
-            ingredients: data.ingredients.join(", "),
-            instructions: data.instructions.join("\n"),
-            imageUrl: data.image?.url || ""
+          title: data.title || "",
+          description: data.description || "",
+          videoUrl:data.videoUrl||"",
+          prepTime: data.prepTime || "",
+          servings: data.servings || "",
+          category: data.category || "Other",
+          ingredients: data.ingredients.join(", "),
+          instructions: data.instructions.join("\n")
         });
         setLoading(false);
-      })
-      .catch(() => setLoading(false));
+      });
   }, [id]);
 
   function handleChange(e) {
@@ -46,52 +49,45 @@ export default function EditRecipe() {
 
   function handleSubmit(e) {
     e.preventDefault();
+    setSubmitting(true);
 
-    const updatedRecipe = {
-      ...formData,
-      prepTime: Number(formData.prepTime),
-      ingredients: formData.ingredients.split(",").map(i => i.trim()),
-      instructions: formData.instructions.split("\n").map(i => i.trim()),
-      image: {
-        url: formData.imageUrl
-      }
-    };
+    const data = new FormData();
+    data.append("title", formData.title);
+    data.append("description", formData.description);
+    data.append("videoUrl", formData.videoUrl);
+    data.append("prepTime", formData.prepTime);
+    data.append("servings", formData.servings);
+    data.append("category", formData.category);
+    data.append("ingredients", JSON.stringify(formData.ingredients.split(",")));
+    data.append("instructions", JSON.stringify(formData.instructions.split("\n")));
+    if (image) data.append("image", image);
 
     fetch(`http://localhost:5001/recipes/${id}`, {
       method: "PUT",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(updatedRecipe)
-    }).then(() => {
-      navigate(`/recipes/${id}`);
-    });
+      body: data
+    }).then(() => navigate(`/recipes/${id}`));
   }
 
-  if (loading) {
+  if (loading || submitting) {
     return <Loading />;
   }
 
   return (
     <div className="edit-recipe">
-      <h2>Edit Recipe</h2>
+      <h2 className="edit-title">Edit Recipe</h2>
 
-      <form onSubmit={handleSubmit} className="edit-form">
+      <form className="edit-form" onSubmit={handleSubmit}>
         <input
-            name="imageUrl"
-            value={formData.imageUrl}
-            onChange={handleChange}
-            placeholder="Image URL"
-        />
-        <input
+          className="edit-input"
           name="title"
           value={formData.title}
           onChange={handleChange}
-          placeholder="Title"
+          placeholder="Recipe title"
           required
         />
 
         <textarea
+          className="edit-textarea"
           name="description"
           value={formData.description}
           onChange={handleChange}
@@ -99,19 +95,36 @@ export default function EditRecipe() {
         />
 
         <input
+          className="edit-file"
+          type="file"
+          accept="image/*"
+          onChange={e => setImage(e.target.files[0])}
+        />
+
+        <input
+          className="edit-input"
+          type="number"
           name="prepTime"
           value={formData.prepTime}
           onChange={handleChange}
-          placeholder="Prep Time (min)"
+          placeholder="Prep time (minutes)"
+        />
+
+        <input
+          className="edit-input"
           type="number"
+          name="servings"
+          value={formData.servings}
+          onChange={handleChange}
+          placeholder="Servings"
         />
 
         <select
+          className="edit-select"
           name="category"
           value={formData.category}
           onChange={handleChange}
         >
-          <option value="">Select category</option>
           <option value="Breakfast">Breakfast</option>
           <option value="Lunch">Lunch</option>
           <option value="Dinner">Dinner</option>
@@ -121,6 +134,7 @@ export default function EditRecipe() {
         </select>
 
         <textarea
+          className="edit-textarea"
           name="ingredients"
           value={formData.ingredients}
           onChange={handleChange}
@@ -128,13 +142,23 @@ export default function EditRecipe() {
         />
 
         <textarea
+          className="edit-textarea"
           name="instructions"
           value={formData.instructions}
           onChange={handleChange}
           placeholder="Instructions (one per line)"
         />
+        <input
+          className="add-input"
+          name="videoUrl"
+          placeholder="YouTube video link (optional)"
+          value={formData.videoUrl}
+          onChange={handleChange}
+        />
 
-        <button type="submit">Update Recipe</button>
+        <button className="edit-btn" type="submit">
+          Update Recipe
+        </button>
       </form>
     </div>
   );

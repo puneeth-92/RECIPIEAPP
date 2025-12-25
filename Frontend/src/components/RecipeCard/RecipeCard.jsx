@@ -1,15 +1,14 @@
 import { Link } from "react-router-dom";
 import "./RecipeCard.css";
-
+import ImageLoader from "../ImageLoader/ImageLoader";
 export default function RecipeCard({ recipe }) {
   return (
     <Link to={`/recipes/${recipe._id}`} className="recipe-link">
       <div className="recipe-card">
-        <img
-          src={recipe.image?.url}
-          alt={recipe.title}
-          className="recipe-image"
-        />
+      <ImageLoader
+        src={recipe.image.url}
+        alt={recipe.title}
+      />
 
         <div className="recipe-content">
           <h3>{recipe.title}</h3>
