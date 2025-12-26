@@ -10,6 +10,7 @@ export default function RecipeDetails() {
   const [recipe, setRecipe] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showVideo, setShowVideo] = useState(false);
+  const [videoLoading, setVideoLoading] = useState(false);
 
   function getEmbedUrl(url) {
     if (!url) return null;
@@ -36,6 +37,20 @@ export default function RecipeDetails() {
 
   if (!recipe) {
     return <h2>Recipe not found</h2>;
+  }
+  function handleDelete() {
+    const confirmDelete = window.confirm("Are you sure you want to delete this recipe?");
+    if (!confirmDelete) return;
+  
+    fetch(`http://localhost:5001/recipes/${id}`, {
+      method: "DELETE",
+      credentials: "include"
+    })
+      .then(res => {
+        if (!res.ok) throw new Error("Delete failed");
+        navigate("/recipes");
+      })
+      .catch(() => alert("Failed to delete recipe"));
   }
 
   return (
@@ -71,34 +86,40 @@ export default function RecipeDetails() {
   
       {recipe.videoUrl ? (
         <button
-          className="video-btn"
-          onClick={() => setShowVideo(prev => !prev)}
-        >
-          {showVideo ? "Hide Video" : "Watch Video"}
-        </button>
+        className="video-btn"
+        onClick={() => {
+          setShowVideo(prev => !prev);
+          setVideoLoading(true);
+        }}>{showVideo ? "Hide Video" : "Watch Video"}
+      </button>
       ) : (
         <p className="no-video">No video available</p>
       )}
   
-      {showVideo && getEmbedUrl(recipe.videoUrl) && (
-        <div className="video-container">
-          <iframe
-            src={getEmbedUrl(recipe.videoUrl)}
-            title="Recipe Video"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          />
-        </div>
-      )}
-  
-      <div className="details-actions">
-        <button
-          className="edit-btn"
-          onClick={() => navigate(`/recipes/${id}/edit`)}
-        >
-          Edit Recipe
-        </button>
+    {showVideo && getEmbedUrl(recipe.videoUrl) && (
+      <div className="video-container">
+        {videoLoading && <Loading />}
+
+        <iframe
+          src={getEmbedUrl(recipe.videoUrl)}
+          title="Recipe Video"
+          onLoad={() => setVideoLoading(false)}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+          style={{ display: videoLoading ? "none" : "block" }}
+        />
       </div>
+    )}
+  
+  <div className="details-actions">
+    <button
+      className="edit-btn"
+      onClick={() => navigate(`/recipes/${id}/edit`)}>Edit Recipe</button>
+
+    <button
+      className="delete-btn"
+      onClick={handleDelete}>Delete Recipe</button>
+  </div>
     </div>
   );
 }

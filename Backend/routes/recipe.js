@@ -4,9 +4,10 @@ const multer = require("multer");
 const Recipe = require("../models/Recipe");
 const cloudinary = require("../config/cloudinary");
 const upload = multer({ storage: multer.memoryStorage() });
+const requireAuth = require("../middleware/requireAuth");
 
 
-router.post("/", upload.single("image"), async (req, res) => {
+router.post("/",requireAuth, upload.single("image"), async (req, res) => {
   try {
     let imageUrl;
 
@@ -36,7 +37,7 @@ router.post("/", upload.single("image"), async (req, res) => {
   }
 });
 
-router.put("/:id", upload.single("image"), async (req, res) => {
+router.put("/:id", requireAuth,upload.single("image"), async (req, res) => {
   let updatedData = {
     title: req.body.title,
     description: req.body.description,
@@ -86,7 +87,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id",requireAuth, async (req, res) => {
   try {
     const recipe = await Recipe.findByIdAndDelete(req.params.id);
     if (!recipe) {
@@ -97,5 +98,4 @@ router.delete("/:id", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
 module.exports = router;

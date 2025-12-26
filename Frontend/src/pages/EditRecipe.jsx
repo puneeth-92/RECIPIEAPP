@@ -64,6 +64,7 @@ export default function EditRecipe() {
 
     fetch(`http://localhost:5001/recipes/${id}`, {
       method: "PUT",
+      credentials: "include",
       body: data
     }).then(() => navigate(`/recipes/${id}`));
   }

@@ -42,6 +42,7 @@ export default function AddRecipe() {
 
         fetch("http://localhost:5001/recipes", {
         method: "POST",
+        credentials: "include",
         body: data
         }).then(() => navigate("/recipes"));
     }
