@@ -91,16 +91,13 @@ router.post("/login", async (req, res) => {
 });
 
 router.post("/logout", (req, res) => {
-  router.post("/logout", (req, res) => {
-    res.clearCookie("token", {
-      httpOnly: true,
-      sameSite: "none",
-      secure: true
-    });
-  
-    res.json({ message: "Logged out" });
+  res.clearCookie("token", {
+    httpOnly: true,
+    sameSite: "none",
+    secure: true
   });
-    res.json({ message: "Logged out" });
+
+  res.json({ message: "Logged out" });
 });
 
 
