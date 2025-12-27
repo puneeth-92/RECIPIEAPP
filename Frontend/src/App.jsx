@@ -9,7 +9,8 @@ import EditRecipe from "./pages/EditRecipe";
 import AddRecipe from "./pages/AddRecipe";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-
+import MyRecipes from "./pages/MyRecipes";
+import NotFound from "./pages/Notfound";
 
 export default function App() {
   return (
@@ -24,8 +25,9 @@ export default function App() {
           <Route path="/recipes" element={<AllRecipes />} />
           <Route path="/recipes/:id" element={<RecipeDetails />} />
           <Route path="/recipes/:id/edit" element={<EditRecipe />} />
+          <Route path="/myrecipes" element={<MyRecipes />} />
           <Route path="/add-recipe" element={<AddRecipe />} />
-          
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
 

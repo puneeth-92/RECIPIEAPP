@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./Navbar.css";
-import Loading from "../Loading/Loading";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
@@ -13,10 +12,7 @@ export default function Navbar() {
     fetch("http://localhost:5001/auth/me", {
       credentials: "include"
     })
-      .then(res => {
-        if (!res.ok) return null;
-        return res.json();
-      })
+      .then(res => (res.ok ? res.json() : null))
       .then(data => {
         setUser(data);
         setLoading(false);
@@ -30,9 +26,11 @@ export default function Navbar() {
       credentials: "include"
     }).then(() => {
       setUser(null);
+      setOpen(false);
       navigate("/login");
     });
   }
+
   return (
     <nav className="navbar">
       <div className="nav-container">
@@ -44,6 +42,7 @@ export default function Navbar() {
           <li>
             <Link to="/" onClick={() => setOpen(false)}>Home</Link>
           </li>
+
           <li>
             <Link to="/recipes" onClick={() => setOpen(false)}>All Recipes</Link>
           </li>
@@ -54,17 +53,29 @@ export default function Navbar() {
                 <Link to="/add-recipe" onClick={() => setOpen(false)}>Add Recipe</Link>
               </li>
               <li>
-                <Link to="/my-recipes" onClick={() => setOpen(false)}>My Recipes</Link>
+                <Link to="/myrecipes" onClick={() => setOpen(false)}>My Recipes</Link>
               </li>
             </>
+          )}
+
+          {!loading && (
+            <li className="mobile-only">
+              {user ? (
+                <button onClick={handleLogout}>Logout</button>
+              ) : (
+                <button
+                  onClick={() => {
+                    setOpen(false);
+                    navigate("/login");
+                  }}>Login</button>
+              )}
+            </li>
           )}
         </ul>
 
         {!loading && (
           user ? (
-            <button className="auth-btn" onClick={handleLogout}>
-              Logout
-            </button>
+            <button className="auth-btn" onClick={handleLogout}>Logout</button>
           ) : (
             <button className="auth-btn" onClick={() => navigate("/login")}>
               Login

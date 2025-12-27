@@ -27,7 +27,8 @@ router.post("/",requireAuth, upload.single("image"), async (req, res) => {
       category: req.body.category,
       ingredients: JSON.parse(req.body.ingredients),
       instructions: JSON.parse(req.body.instructions),
-      image: { url: imageUrl }
+      image: { url: imageUrl },
+      owner: req.userId
     });
 
     await recipe.save();
@@ -37,38 +38,63 @@ router.post("/",requireAuth, upload.single("image"), async (req, res) => {
   }
 });
 
-router.put("/:id", requireAuth,upload.single("image"), async (req, res) => {
-  let updatedData = {
-    title: req.body.title,
-    description: req.body.description,
-    videoUrl: req.body.videoUrl,
-    prepTime: req.body.prepTime,
-    category: req.body.category,
-    ingredients: JSON.parse(req.body.ingredients),
-    instructions: JSON.parse(req.body.instructions)
-  };
+router.put("/:id", requireAuth, upload.single("image"), async (req, res) => {
+  try {
+    const recipe = await Recipe.findById(req.params.id);
 
-  if (req.file) {
-    const result = await cloudinary.uploader.upload(
-      `data:${req.file.mimetype};base64,${req.file.buffer.toString("base64")}`,
-      { folder: "recipes" }
+    if (!recipe) {
+      return res.status(404).json({ message: "Recipe not found" });
+    }
+
+    if (recipe.owner.toString() !== req.userId) {
+      return res.status(403).json({ message: "Not authorized" });
+    }
+
+    let updatedData = {
+      title: req.body.title,
+      description: req.body.description,
+      videoUrl: req.body.videoUrl,
+      prepTime: req.body.prepTime,
+      category: req.body.category,
+      ingredients: JSON.parse(req.body.ingredients),
+      instructions: JSON.parse(req.body.instructions)
+    };
+
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(
+        `data:${req.file.mimetype};base64,${req.file.buffer.toString("base64")}`,
+        { folder: "recipes" }
+      );
+      updatedData.image = { url: result.secure_url };
+    }
+
+    const updatedRecipe = await Recipe.findByIdAndUpdate(
+      req.params.id,
+      updatedData,
+      { new: true }
     );
-    updatedData.image = { url: result.secure_url };
+
+    res.json(updatedRecipe);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
-
-  const recipe = await Recipe.findByIdAndUpdate(
-    req.params.id,
-    updatedData,
-    { new: true }
-  );
-
-  res.json(recipe);
 });
 
 
 router.get("/", async (req, res) => {
   try {
     const recipes = await Recipe.find().sort({ createdAt: -1 });
+    res.json(recipes);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.get("/myrecipes",requireAuth, async (req, res) => {
+  try {
+    const recipes = await Recipe.find({ owner: req.userId })
+      .sort({ createdAt: -1 });
+
     res.json(recipes);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -87,12 +113,19 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.delete("/:id",requireAuth, async (req, res) => {
+router.delete("/:id", requireAuth, async (req, res) => {
   try {
-    const recipe = await Recipe.findByIdAndDelete(req.params.id);
+    const recipe = await Recipe.findById(req.params.id);
+
     if (!recipe) {
       return res.status(404).json({ message: "Recipe not found" });
     }
+
+    if (recipe.owner.toString() !== req.userId) {
+      return res.status(403).json({ message: "Not authorized" });
+    }
+
+    await recipe.deleteOne();
     res.json({ message: "Recipe deleted successfully" });
   } catch (err) {
     res.status(500).json({ error: err.message });
