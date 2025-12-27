@@ -10,7 +10,7 @@ export default function MyRecipes() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://localhost:5001/recipes/myrecipes", {
+    fetch(`${import.meta.env.VITE_API_URL}/recipes/myrecipes`, {
       credentials: "include"
     })
       .then(res => {

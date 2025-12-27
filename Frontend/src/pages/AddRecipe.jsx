@@ -40,7 +40,7 @@ export default function AddRecipe() {
         data.append("instructions", JSON.stringify(formData.instructions.split("\n")));
         if (image) data.append("image", image);
 
-        fetch("http://localhost:5001/recipes", {
+        fetch(`${import.meta.env.VITE_API_URL}/recipes`, {
         method: "POST",
         credentials: "include",
         body: data

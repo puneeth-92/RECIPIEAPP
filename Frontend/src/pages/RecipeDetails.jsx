@@ -28,7 +28,7 @@ export default function RecipeDetails() {
   }
 
   useEffect(() => {
-    fetch(`http://localhost:5001/recipes/${id}`)
+    fetch(`${import.meta.env.VITE_API_URL}/recipes/${id}`)
       .then(res => res.json())
       .then(data => {
         setRecipe(data);
@@ -38,7 +38,7 @@ export default function RecipeDetails() {
   }, [id]);
 
   useEffect(() => {
-    fetch("http://localhost:5001/auth/me", {
+    fetch(`${import.meta.env.VITE_API_URL}/auth/me`, {
       credentials: "include"
     })
       .then(res => (res.ok ? res.json() : null))
@@ -51,7 +51,7 @@ export default function RecipeDetails() {
     );
     if (!confirmDelete) return;
 
-    fetch(`http://localhost:5001/recipes/${id}`, {
+    fetch(`${import.meta.env.VITE_API_URL}/recipes/${id}`, {
       method: "DELETE",
       credentials: "include"
     })

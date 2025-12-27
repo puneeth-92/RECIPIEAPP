@@ -23,7 +23,7 @@ export default function EditRecipe() {
   });
 
   useEffect(() => {
-    fetch(`http://localhost:5001/recipes/${id}`)
+    fetch(`${import.meta.env.VITE_API_URL}/recipes/${id}`)
       .then(res => res.json())
       .then(data => {
         setFormData({
@@ -62,7 +62,7 @@ export default function EditRecipe() {
     data.append("instructions", JSON.stringify(formData.instructions.split("\n")));
     if (image) data.append("image", image);
 
-    fetch(`http://localhost:5001/recipes/${id}`, {
+    fetch(`${import.meta.env.VITE_API_URL}/recipes/${id}`, {
       method: "PUT",
       credentials: "include",
       body: data
