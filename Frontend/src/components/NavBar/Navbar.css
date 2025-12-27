@@ -61,19 +61,16 @@
     background: black;
 }
 
-/* MOBILE ONLY AUTH */
 .mobile-only {
     display: none;
 }
 
-/* TABLET */
 @media (max-width: 1024px) {
     .nav-container {
         padding: 16px 40px;
     }
 }
 
-/* MOBILE */
 @media (max-width: 768px) {
     .nav-links {
         position: absolute;
@@ -84,9 +81,9 @@
         flex-direction: column;
         align-items: center;
         display: none;
-        /* gap: 10px; */
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
         padding: 4px 0;
+        z-index: 9999;
     }
 
     .nav-links.open {
@@ -109,7 +106,6 @@
         display: none;
     }
 
-    /* MOBILE LOGIN / LOGOUT AS TEXT */
     .mobile-only {
         display: block;
         padding: 6px 0;
@@ -128,5 +124,6 @@
 
     .hamburger {
         display: flex;
+        z-index: 10000;
     }
 }
