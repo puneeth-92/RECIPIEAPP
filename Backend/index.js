@@ -11,7 +11,7 @@ const authRoutes = require("./routes/auth");
 app.use(cors({
   origin: [
     "http://localhost:5173",
-    "https://www.recipie.com"
+    "https://recipie-app-lake.vercel.app"
   ],
   credentials: true
 }));
