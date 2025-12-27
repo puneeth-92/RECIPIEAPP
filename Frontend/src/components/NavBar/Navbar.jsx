@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import "./Navbar.css";
 
 export default function Navbar() {
@@ -7,10 +7,14 @@ export default function Navbar() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
+    setLoading(true);
+
     fetch(`${import.meta.env.VITE_API_URL}/auth/me`, {
-      credentials: "include"
+      credentials: "include",
+      cache: "no-store"
     })
       .then(res => (res.ok ? res.json() : null))
       .then(data => {
@@ -18,7 +22,7 @@ export default function Navbar() {
         setLoading(false);
       })
       .catch(() => setLoading(false));
-  }, []);
+  }, [location.pathname]);
 
   function handleLogout() {
     fetch(`${import.meta.env.VITE_API_URL}/auth/logout`, {
@@ -39,21 +43,13 @@ export default function Navbar() {
         </div>
 
         <ul className={`nav-links ${open ? "open" : ""}`}>
-          <li>
-            <Link to="/" onClick={() => setOpen(false)}>Home</Link>
-          </li>
-          <li>
-            <Link to="/recipes" onClick={() => setOpen(false)}>All Recipes</Link>
-          </li>
+          <li><Link to="/" onClick={() => setOpen(false)}>Home</Link></li>
+          <li><Link to="/recipes" onClick={() => setOpen(false)}>All Recipes</Link></li>
 
           {user && (
             <>
-              <li>
-                <Link to="/add-recipe" onClick={() => setOpen(false)}>Add Recipe</Link>
-              </li>
-              <li>
-                <Link to="/myrecipes" onClick={() => setOpen(false)}>My Recipes</Link>
-              </li>
+              <li><Link to="/add-recipe" onClick={() => setOpen(false)}>Add Recipe</Link></li>
+              <li><Link to="/myrecipes" onClick={() => setOpen(false)}>My Recipes</Link></li>
             </>
           )}
 
@@ -62,12 +58,10 @@ export default function Navbar() {
               {user ? (
                 <button onClick={handleLogout}>Logout</button>
               ) : (
-                <button
-                  onClick={() => {
-                    setOpen(false);
-                    navigate("/login");
-                  }}
-                >
+                <button onClick={() => {
+                  setOpen(false);
+                  navigate("/login");
+                }}>
                   Login
                 </button>
               )}
