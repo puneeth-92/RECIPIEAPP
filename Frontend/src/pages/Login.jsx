@@ -42,7 +42,7 @@ export default function Login() {
         return;
       }
 
-      navigate("/recipes");
+      window.location.href = "/recipes";
     } catch {
       setError("Something went wrong");
       setLoading(false);
