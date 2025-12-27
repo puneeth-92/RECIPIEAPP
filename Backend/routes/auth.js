@@ -8,7 +8,7 @@ const router = express.Router();
 
 const COOKIE_OPTIONS = {
   httpOnly: true,
-  sameSite: "lax",
+  sameSite: "none",
   secure: true,
   path: "/",
   maxAge: 7 * 24 * 60 * 60 * 1000
@@ -25,13 +25,11 @@ router.post("/signup", async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = new User({
+    const user = await User.create({
       username,
       email,
       password: hashedPassword
     });
-
-    await user.save();
 
     const token = jwt.sign(
       { userId: user._id },
@@ -90,7 +88,7 @@ router.post("/login", async (req, res) => {
 router.post("/logout", (req, res) => {
   res.clearCookie("token", {
     httpOnly: true,
-    sameSite: "lax",
+    sameSite: "none",
     secure: true,
     path: "/"
   });

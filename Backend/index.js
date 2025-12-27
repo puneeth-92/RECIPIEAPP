@@ -2,23 +2,35 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const cors = require("cors");
-require("dotenv").config();
 const cookieParser = require("cookie-parser");
+require("dotenv").config();
 
 const recipeRoutes = require("./routes/recipe");
 const authRoutes = require("./routes/auth");
 
-app.use(cors({
-  origin: [
-    "http://localhost:5173",
-    "https://recipie-app-lake.vercel.app"
-  ],
-  credentials: true
-}));
-app.use(cookieParser());
 app.use(express.json());
+app.use(cookieParser());
 
-mongoose.connect(process.env.MONGO_URL)
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      const allowedOrigins = [
+        "http://localhost:5173",
+        "https://recipie-app-lake.vercel.app"
+      ];
+
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true
+  })
+);
+
+mongoose
+  .connect(process.env.MONGO_URL)
   .then(() => console.log("MongoDB connected"))
   .catch(err => console.log(err));
 
