@@ -4,7 +4,7 @@ export default function HeroText() {
   const navigate = useNavigate();
 
   function handleGetStarted() {
-    fetch("http://localhost:5001/auth/me", {
+    fetch(`${import.meta.env.VITE_API_URL}/auth/me`, {
       credentials: "include"
     })
       .then(res => {
