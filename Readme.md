@@ -118,7 +118,7 @@ Puneeth J
 Computer Science Engineering student
 Built as a full-stack learning and portfolio project
 
-⸻
+---
 
 License
 
