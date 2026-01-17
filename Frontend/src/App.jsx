@@ -12,6 +12,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import MyRecipes from "./pages/MyRecipes";
 import Loading from "./components/Loading/Loading";
+import NotFound from "./pages/Notfound";
 
 export default function App() {
   const [user, setUser] = useState(null);
@@ -47,6 +48,7 @@ export default function App() {
           <Route path="/recipes/:id/edit" element={<EditRecipe user={user} />} />
           <Route path="/myrecipes" element={user ? <MyRecipes /> : <Login />} />
           <Route path="/add-recipe" element={user ? <AddRecipe /> : <Login />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
 
